@@ -106,7 +106,7 @@ public class Flow {
 //
 //        WebDriver driver = Driver.getDriver();
 //        driver.get("https://magento.softwaretestingboard.com/");
-//        Flow.takeScreenshot(driver,target/test-classes/tests);
+//        Flow.takeScreenshot(driver,target/test-classes/Schedule.tests);
     }
 
 
