@@ -24,6 +24,6 @@ public class ScheduleTabTest {
 
     @Test
     public void createEvent() throws InterruptedException {
-        scheduleTab.createEventFunction("2024", "february",9,"01:10","02:20","Work");
+        scheduleTab.createEventFunction("2024", "march",15,"01:10","02:20","Work");
     }
 }
