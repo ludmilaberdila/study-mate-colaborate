@@ -96,5 +96,18 @@ public class TeachersWebElements {
     // this button is for confirmation on delete teacher record
     @FindBy(xpath = "//button[contains(text(), 'Delete')]")
     public WebElement deleteTeacherConfirm;
+
+    @FindBy(xpath = "//button[contains(@aria-label, 'Go to next page')]")
+    public WebElement navigateNextButton;
+
+    @FindBy(xpath = "//button[contains(@aria-label, 'Go to previous page')]")
+    public WebElement navigatePreviousPage;
+
+    @FindBy(xpath = "//nav[contains(@aria-label, 'pagination')]")
+    public WebElement pageNavigationNav;
+
+    @FindBy(xpath = "//button[contains(@aria-current, 'true')]")
+    public WebElement activeNavigatePage;
+    //nav[contains(@aria-label, 'pagination')]//li[3]//button[contains(@aria-current, 'true')]
 }
 
