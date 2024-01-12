@@ -2,8 +2,10 @@ package Schedule.tests;
 
 import Schedule.ScheduleTab;
 import Utilities.Driver;
+import Utils.Util;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -25,5 +27,6 @@ public class ScheduleTabTest {
     @Test
     public void createEvent() throws InterruptedException {
         scheduleTab.createEventFunction("2024", "march",15,"01:10","02:20","Work");
+        Util.printLog("success","Event successfully created!");
     }
 }
