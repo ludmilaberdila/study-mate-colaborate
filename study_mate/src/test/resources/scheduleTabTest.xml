@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Schedule Tab Test">
+    <test name="Smoke Test">
+        <classes>
+            <class name="tests.ScheduleTabTest"> </class>
+        </classes>
+    </test>
+</suite>
