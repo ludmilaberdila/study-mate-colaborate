@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.pagefactory.ByChained;
 
 import java.util.HashMap;
 
@@ -25,6 +26,13 @@ public class TeachersTests {
         driver = Driver.getDriver();
         config = new StudyMateConfig();
         config.setUpConfig();
+    }
+
+    @AfterClass
+    public static void finishTesting() throws InterruptedException{
+        Util.printLog("success", "*** All test cases finished ***");
+        Thread.sleep(5000);
+//        driver.quit();
     }
 
     @Before
@@ -338,6 +346,83 @@ public class TeachersTests {
                 "successSuccess",
                 "Instructor successfully deleted");
         Assert.assertTrue("Teacher was unable to delete", teacherEdited);
+    }
+
+    @Test
+    public void step23_navigatePagination() throws InterruptedException{
+        Util.printLog("success", "click on arrow to go to next set of teachers");
+        config.generateNewTeacher(); // generate new teacher
+        HashMap<String, String> teacherToAdd = config.teacherToAdd;
+        // add teacher first time
+        Util.addNewTeacher(driver, teacherPath, teacherToAdd, true);
+        Thread.sleep(2000);
+
+        teacherPath.paginationCount.clear();
+        teacherPath.paginationCount.sendKeys("2");
+        teacherPath.paginationCount.sendKeys(Keys.RETURN);
+
+        // navigate to next page
+        teacherPath.navigateNextButton.click();
+        Thread.sleep(1000);
+        String activeBtn = "//li[*]//button[contains(@aria-current, 'true')]";
+        boolean activeBtnsEmpty;
+        activeBtnsEmpty = teacherPath.pageNavigationNav.findElements(
+                By.xpath(activeBtn.replace('*', '3'))).isEmpty();
+        boolean nextPageActive = !activeBtnsEmpty;
+        if(nextPageActive){
+            Util.printLog("success", "Second page is active");
+        }else{
+            Util.printLog("error", "Second page is not active");
+        }
+        Assert.assertTrue("Second page is not active", nextPageActive);
+
+        // navigate previous page
+        teacherPath.navigatePreviousPage.click();
+        activeBtnsEmpty = teacherPath.pageNavigationNav.findElements(
+                By.xpath(activeBtn.replace('*', '2'))).isEmpty();
+        boolean firstPageActive = !activeBtnsEmpty;
+        if(firstPageActive){
+            Util.printLog("success", "First page is active");
+        }else{
+            Util.printLog("error", "First page is not active");
+        }
+        Assert.assertTrue("First page is not active", firstPageActive);
+    }
+
+    @Test
+    public void step24_removeTeacherWithLargeContent() throws InterruptedException{
+        Util.printLog("warning", "Test delete teacher with large first name, last name phone number" +
+                " email address and specialization");
+        config.wait.until(d -> teacherPath.addTeachButton.isDisplayed());
+        Thread.sleep(1000);
+        // add teacher first
+        HashMap<String, String> teacherToAdd = config.teacherToAdd;
+        teacherToAdd.put("email", Util.getRandomString(230) + ".urmat@gmail.com");
+        teacherToAdd.put("fName", Util.getRandomString(240));
+        teacherToAdd.put("lName", Util.getRandomString(240));
+        teacherToAdd.put("phone", Util.generateRandomPhone(240));
+        teacherToAdd.put("specialization", Util.getRandomString(240));
+        teacherToAdd.put("studyFormat", "Marketing;TESTING TAB");
+
+        Util.addNewTeacher(driver, teacherPath, teacherToAdd, true);
+        // try to remove the teacher
+        String totalTeachers = Util.getNumberOfTeachers(teacherPath);
+        teacherPath.paginationCount.clear();
+        teacherPath.paginationCount.sendKeys(totalTeachers);
+        teacherPath.paginationCount.sendKeys(Keys.RETURN);
+        teacherPath.tableBodyTr.findElement(
+                By.xpath("//tr[" + Integer.parseInt(totalTeachers) + "]//td[6]//button")).click();
+        teacherPath.deleteTeacherAction.click();
+        Thread.sleep(1000);
+        teacherPath.deleteTeacherConfirm.click();
+        Thread.sleep(1000);
+        boolean teacherRemoved = Util.compareAlertMessage(driver,
+                "successSuccess",
+                "Instructor successfully deleted");
+        if(!teacherRemoved){
+            teacherPath.cancelButton.click();
+        }
+        Assert.assertTrue("Unable to remove teacher with large content", teacherRemoved);
     }
 
 
