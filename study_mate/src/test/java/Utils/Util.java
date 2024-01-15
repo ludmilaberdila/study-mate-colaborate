@@ -37,7 +37,7 @@ public class Util {
         try {
             teacherPath.click();
         }catch (Exception e){
-            printLog("success", "No Cancel button found to click");
+            printLog("warning", "No Cancel button found to click");
         }
         Thread.sleep(2000);
     }

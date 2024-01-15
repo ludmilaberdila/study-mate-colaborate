@@ -1,16 +1,15 @@
 package Teacher.tests;
 
-import Utils.StudyMateConfig;
 import Teacher.TeachersWebElements;
-import Utils.Util;
 import Utilities.Driver;
+import Utils.StudyMateConfig;
+import Utils.Util;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.pagefactory.ByChained;
 
 import java.util.HashMap;
 
@@ -189,10 +188,9 @@ public class TeachersTests {
         teacherPath.addTeachButton.click();
         boolean isSubmitEnabled = teacherPath.submitTeacherForm.isEnabled();
         Assert.assertTrue("Submit button is not disabled", !isSubmitEnabled);
-
         try { Util.cancelButton(teacherPath.cancelButton);
         } catch (InterruptedException e) { throw new RuntimeException(e); }
-
+        Thread.sleep(1000);
         HashMap<String, String> teacherToAdd = config.teacherToAdd;
         // add teacher first time
         Util.addNewTeacher(driver, teacherPath, teacherToAdd, false);
@@ -203,7 +201,7 @@ public class TeachersTests {
         teacherPath.inputFirstName.clear();
         isSubmitEnabled = teacherPath.submitTeacherForm.isEnabled();
         Assert.assertTrue("Submit button is not disabled", !isSubmitEnabled);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         try { Util.cancelButton(teacherPath.cancelButton);
         } catch (InterruptedException e) { throw new RuntimeException(e); }
     }
@@ -223,6 +221,7 @@ public class TeachersTests {
         teacherToAdd.put("studyFormat", "Marketing;TESTING TAB");
 
         Util.addNewTeacher(driver, teacherPath, teacherToAdd, true);
+        Thread.sleep(300);
         boolean teacherAdded = Util.compareAlertMessage(driver,
                 "successSuccess",
                 "Instructor successfully saved");
