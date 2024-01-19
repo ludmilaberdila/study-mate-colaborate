@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.decorators.WebDriverDecorator;
 
 public class ScheduleTab {
 
@@ -41,6 +42,37 @@ public class ScheduleTab {
 
     @FindBy(xpath = "//li[@data-value='459']")
     public WebElement group;
+
+    @FindBy(xpath = "//div[@class='sc-gJqSRm fJqgnq']")
+    public WebElement orange;
+
+    @FindBy(xpath = "//div[@class='sc-gJqSRm jbRidv']")
+    public WebElement red;
+
+    @FindBy(xpath = "//div[@class='sc-gJqSRm iA-deBs']")
+    public WebElement yellow;
+
+    @FindBy(xpath = "//div[@class='sc-gJqSRm frSawh']")
+    public WebElement green;
+
+    @FindBy(xpath = "//div[@class='sc-gJqSRm kvfMbB']")
+    public WebElement blue;
+
+    @FindBy(xpath = "//div[@class='sc-gJqSRm dSJjef']")
+    public WebElement violet;
+
+    @FindBy(xpath = "(//div[contains(text(),'Schedule')])[3]")
+    public WebElement createSchedule;
+
+    @FindBy(id = ":r7:")
+    public WebElement scheduleName;
+
+    @FindBy(xpath = "(//button[@class='MuiButtonBase-root MuiIconButton-root " +
+            "MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-slyssw'])[2]")
+    public WebElement scheduleCalendarIcon;
+
+    @FindBy(xpath = "//button[contains(text(),'Delete')]")
+    public WebElement deleteButtonRed;
 
     public void createEventFunction(String yearValue,String monthValue,int dayValue, String startTime,String endTime, String nameValue) throws InterruptedException {
         createEventButton.click();
@@ -79,6 +111,122 @@ public class ScheduleTab {
                 "MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-79mk38'])[2]"));
         publishButton.click();
     }
+
+
+    public void createScheduleFunction(String yearValue, String monthValue, int dayValue, String startTime, String
+            endTime, String nameValue, String groupName, String weekDay, String yearValue2,
+                                       String monthValue2, int dayValue2){
+
+        createSchedule.click();
+
+        calendarIcon.click();
+        WebElement yearButton = driver.findElement(By.xpath("//button[@class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall " +
+                "MuiPickersCalendarHeader-switchViewButton css-1wjkg3']"));
+        JsUtils.click(yearButton, driver);
+
+        WebElement yearValueButton = driver.findElement(By.xpath("//button[contains(text(), '" + yearValue + "')]"));
+        JsUtils.click(yearValueButton, driver);
+
+        selectMonth(monthValue);
+
+        WebElement dayValueButton = driver.findElement(By.xpath("//button[contains(text(),'" + (dayValue-1) + "')]"));
+        JsUtils.click(dayValueButton, driver);
+
+        fromTime.click();
+        fromTime.sendKeys(startTime);
+        tillTime.click();
+        tillTime.sendKeys(endTime);
+
+        scheduleName.sendKeys(nameValue);
+
+        chooseGroupButton.click();
+        chooseGroupField(groupName);
+
+        Actions actions = new Actions(driver);
+        actions.moveByOffset(1, 1).click().build().perform();
+
+        clickDay(weekDay);
+
+        scheduleCalendarIcon.click();
+
+        WebElement yearButton2 = driver.findElement(By.xpath("//button[@class='MuiButtonBase-root " +
+                "MuiIconButton-root MuiIconButton-sizeSmall MuiPickersCalendarHeader-switchViewButton css-1wjkg3']"));
+        JsUtils.click(yearButton2, driver);
+
+
+        WebElement yearValueButton2 = driver.findElement(By.xpath("//button[contains(text(), '" + yearValue2 + "')]"));
+        JsUtils.click(yearValueButton2, driver);
+
+        selectMonth(monthValue2);
+
+        WebElement dayValueButton2 = driver.findElement(By.xpath("//button[contains(text(),'" + (dayValue2-1) + "')]"));
+        JsUtils.click(dayValueButton2, driver);
+
+
+
+        WebElement publishButton = driver.findElement(By.xpath("(//button[@class='MuiButtonBase-root MuiButton-root MuiButton-contained " +
+                "MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root " +
+                "MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-79mk38'])[2]"));
+        publishButton.click();
+
+
+    }
+
+    public void chooseGroupField(String name){
+        WebElement choseGroupText = driver.findElement(By.xpath("//li[contains(text(),'" + name + "')]"));
+        JsUtils.click(choseGroupText,driver);
+    }
+
+    public String getDays(String daysName){
+
+        switch (daysName.toLowerCase()){
+            case "monday":
+                return "Mon";
+            case "tuesday":
+                return "Tues";
+            case "wednesday":
+                return "Wen";
+            case "thursday":
+                return "Thurs";
+            case "friday":
+                return "Fri";
+            case "saturday":
+                return "sat";
+            case "sunday":
+                return "sun";
+            default:
+                throw new IllegalArgumentException("Invalid day's name: " + daysName);
+        }
+    }
+
+    public void clickDay(String dayName){
+        String shortDay = getDays(dayName);
+        WebElement weekDay = driver.findElement(By.xpath("//button[contains(text(),'" + shortDay + "')]"));
+        weekDay.click();
+    }
+
+    public void setColor(String colorName){
+        switch (colorName.toLowerCase()){
+            case "orange":
+                orange.click();
+            case "red":
+                red.click();
+            case "yellow":
+                yellow.click();
+            case "green":
+                green.click();
+            case "blue":
+                blue.click();
+            case "violet":
+                violet.click();
+            default:
+                throw new IllegalArgumentException("Invalid color name: " + colorName);
+        }
+    }
+
+
+
+
 
     public void selectMonth(String targetMonth){
 
@@ -133,5 +281,13 @@ public class ScheduleTab {
             default:
                 throw new IllegalArgumentException("Invalid month name: " + monthName);
         }
+    }
+
+    //2024-01-09
+    public void deleteEvent(String date){
+        WebElement dataDate = driver.findElement(By.xpath("//td[@data-date='" + date + "']/div/div/div/a"));
+        dataDate.click();
+        WebElement deleteButton = driver.findElement(By.cssSelector("svg[aria-label='Delete']"));
+        deleteButton.click();
     }
 }
