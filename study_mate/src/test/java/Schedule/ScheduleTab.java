@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.decorators.WebDriverDecorator;
 
 public class ScheduleTab {
 
@@ -69,6 +70,9 @@ public class ScheduleTab {
     @FindBy(xpath = "(//button[@class='MuiButtonBase-root MuiIconButton-root " +
             "MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-slyssw'])[2]")
     public WebElement scheduleCalendarIcon;
+
+    @FindBy(xpath = "//button[contains(text(),'Delete')]")
+    public WebElement deleteButtonRed;
 
     public void createEventFunction(String yearValue,String monthValue,int dayValue, String startTime,String endTime, String nameValue) throws InterruptedException {
         createEventButton.click();
@@ -277,5 +281,13 @@ public class ScheduleTab {
             default:
                 throw new IllegalArgumentException("Invalid month name: " + monthName);
         }
+    }
+
+    //2024-01-09
+    public void deleteEvent(String date){
+        WebElement dataDate = driver.findElement(By.xpath("//td[@data-date='" + date + "']/div/div/div/a"));
+        dataDate.click();
+        WebElement deleteButton = driver.findElement(By.cssSelector("svg[aria-label='Delete']"));
+        deleteButton.click();
     }
 }
